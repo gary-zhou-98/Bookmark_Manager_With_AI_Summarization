@@ -9,7 +9,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
 
-    articles = db.relationship("Bookmark", back_populates="user")
+    bookmarks = db.relationship("Bookmark", back_populates="user")
 
 class Bookmark(db.Model):
     __tablename__ = 'bookmarks'
@@ -22,5 +22,5 @@ class Bookmark(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
     
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    user = db.relationship("User", back_populates="articles")
+    user = db.relationship("User", back_populates="bookmarks")
 
