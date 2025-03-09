@@ -2,11 +2,11 @@
 
 @layer components {
   .auth-container {
-    @apply min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12 sm:px-6 lg:px-8;
+    @apply flex items-center justify-center w-full max-w-2xl bg-gray-900 px-4 py-12 sm:px-6 lg:px-8;
   }
 
   .auth-card {
-    @apply w-full max-w-md bg-gray-800 rounded-xl shadow-xl p-8 space-y-6 
+    @apply w-full bg-gray-800 rounded-xl shadow-xl p-8 space-y-4 
     border border-gray-700/50 backdrop-blur-sm;
   }
 

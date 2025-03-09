@@ -48,7 +48,7 @@ export default function Login() {
             />
           </div>
 
-          <div className="flex items-center justify-start mb-6">
+          <div className="flex items-center justify-start mb-4">
             <Link href="/auth/forgot-password" className="auth-link text-sm">
               Forgot password?
             </Link>
