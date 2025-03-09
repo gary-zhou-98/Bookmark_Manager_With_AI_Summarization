@@ -36,8 +36,8 @@ def create_app():
     jwt.init_app(app)
 
     # Import and register blueprints
-    from app.routes.registration import registration_bp
-    app.register_blueprint(registration_bp)
+    from app.routes.register import register_bp
+    app.register_blueprint(register_bp)
 
     @app.route('/health')
     def health():

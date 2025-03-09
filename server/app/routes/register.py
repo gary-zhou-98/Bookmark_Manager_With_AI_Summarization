@@ -3,9 +3,9 @@ from app.models import User
 from app.service.authService import hash_password
 from flask import request, jsonify, Blueprint
 
-registration_bp = Blueprint("registration", __name__)
+register_bp = Blueprint("register", __name__)
 
-@registration_bp.post("/auth/register")
+@register_bp.post("/auth/register")
 def register():
   data = request.json
   email = data.get("email")
