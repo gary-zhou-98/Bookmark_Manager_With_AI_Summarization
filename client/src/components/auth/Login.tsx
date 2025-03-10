@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import "@/styles/auth.css";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, user, accessToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await login(email, password);
   };
+
+  useEffect(() => {
+    if (user && accessToken) {
+      router.push(`/home/${user.id}`);
+    }
+  }, [user, accessToken, router]);
 
   return (
     <div className="auth-container">
