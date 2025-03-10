@@ -20,10 +20,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await loginRequest(email, password).then((response) => {
         setUser(response.user);
-        setAccessToken(response.accessToken);
+        setAccessToken(response.access_token);
       });
     } catch (error) {
       console.error("Login failed:", error);
+      alert("Login failed: " + error);
     }
   }, []);
 

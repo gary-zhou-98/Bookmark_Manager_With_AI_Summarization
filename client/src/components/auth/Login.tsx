@@ -1,9 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import "@/styles/auth.css";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await login(email, password);
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -17,7 +28,7 @@ export default function Login() {
           </p>
         </div>
 
-        <form className="auth-form">
+        <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-input-group">
             <label htmlFor="email" className="auth-label">
               Email address
@@ -30,6 +41,8 @@ export default function Login() {
               required
               className="auth-input"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -45,6 +58,8 @@ export default function Login() {
               required
               className="auth-input"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -54,7 +69,11 @@ export default function Login() {
             </Link>
           </div>
 
-          <button type="submit" className="auth-button">
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={!email || !password}
+          >
             Sign in
           </button>
         </form>
