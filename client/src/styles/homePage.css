@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@layer components {
+  .home-container {
+    @apply flex flex-col items-center justify-center w-full max-w-6xl bg-gray-900 px-4 py-12 sm:px-6 lg:px-8;
+  }
+
+  .home-header {
+    @apply flex flex-col items-center justify-center w-full mb-6;
+  }
+
+  .home-title {
+    @apply text-3xl font-bold text-gray-100 mb-2;
+  }
+
+  .home-subtitle {
+    @apply text-gray-400;
+  }
+
+  .bookmarks-grid {
+    @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3 w-full;
+  }
+
+  .bookmark-card {
+    @apply block bg-gray-800 rounded-xl p-6 border border-gray-700/50
+    hover:border-indigo-400/50 transition-all duration-200
+    shadow-lg hover:shadow-indigo-500/10 cursor-pointer
+    hover:bg-gray-800/80;
+  }
+
+  .bookmark-title {
+    @apply text-lg font-medium text-gray-100 mb-2
+    transition-colors duration-200;
+  }
+
+  .bookmark-url {
+    @apply text-sm text-gray-400 truncate
+    transition-colors duration-200;
+  }
+
+  .add-bookmark-button {
+    @apply fixed bottom-8 right-8 bg-indigo-500/90 text-white p-4 rounded-full
+    hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50
+    transition-all duration-200 shadow-lg shadow-indigo-500/20;
+  }
+}
