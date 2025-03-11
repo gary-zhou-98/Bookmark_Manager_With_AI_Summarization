@@ -38,6 +38,9 @@ def create_app():
     # Import and register blueprints
     from app.routes.register import register_bp
     app.register_blueprint(register_bp)
+    
+    from app.routes.login import login_bp
+    app.register_blueprint(login_bp)
 
     @app.route('/health')
     def health():

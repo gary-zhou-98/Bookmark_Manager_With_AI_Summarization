@@ -11,6 +11,13 @@ class User(db.Model):
 
     bookmarks = db.relationship("Bookmark", back_populates="user")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'created_at': self.created_at.isoformat()
+        }
+
 class Bookmark(db.Model):
     __tablename__ = 'bookmarks'
 

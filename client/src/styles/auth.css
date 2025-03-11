@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@layer components {
+  .auth-container {
+    @apply flex items-center justify-center w-full max-w-2xl bg-gray-900 px-4 py-12 sm:px-6 lg:px-8;
+  }
+
+  .auth-card {
+    @apply w-full bg-gray-800 rounded-xl shadow-xl p-8 space-y-4 
+    border border-gray-700/50 backdrop-blur-sm;
+  }
+
+  .auth-header {
+    @apply text-center;
+  }
+
+  .auth-title {
+    @apply text-3xl font-bold text-gray-100;
+  }
+
+  .auth-subtitle {
+    @apply mt-2 text-gray-400;
+  }
+
+  .auth-form {
+    @apply space-y-6;
+  }
+
+  .auth-input-group {
+    @apply space-y-1;
+  }
+
+  .auth-label {
+    @apply block text-sm font-medium text-gray-300;
+  }
+
+  .auth-input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-600 
+    bg-gray-700/50 text-gray-100 placeholder-gray-500
+    focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20
+    transition-all duration-200;
+  }
+
+  .auth-checkbox {
+    @apply h-4 w-4 rounded border-gray-600 bg-gray-700/50 
+    text-indigo-500 focus:ring-2 focus:ring-indigo-400/30 focus:ring-offset-1 
+    focus:ring-offset-gray-800 transition-all duration-200;
+  }
+
+  .auth-checkbox-label {
+    @apply ml-2 block text-sm text-gray-300;
+  }
+
+  .auth-button {
+    @apply w-full bg-indigo-500/90 text-white py-3 px-4 rounded-lg font-medium
+    hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50
+    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+    shadow-lg shadow-indigo-500/20;
+  }
+
+  .auth-link {
+    @apply text-indigo-400 hover:text-indigo-300 font-medium transition-colors duration-200;
+  }
+
+  .auth-error {
+    @apply text-rose-400 text-sm mt-1;
+  }
+}
