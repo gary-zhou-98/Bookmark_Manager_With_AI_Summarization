@@ -7,7 +7,22 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const pathname = usePathname();
-  const { user, accessToken } = useAuth();
+  const { user, accessToken, logout } = useAuth();
+  const loginOrOutButton =
+    user && accessToken ? (
+      <button className="nav-link" onClick={logout}>
+        Logout
+      </button>
+    ) : (
+      <Link
+        href="/auth/login"
+        className={`nav-link ${
+          pathname === "/auth/login" ? "nav-link-active" : ""
+        }`}
+      >
+        Login
+      </Link>
+    );
   return (
     <header className="header-container">
       <div className="header-content">
@@ -24,14 +39,7 @@ export default function Header() {
           >
             My Bookmarks
           </Link>
-          <Link
-            href="/auth/login"
-            className={`nav-link ${
-              pathname === "/auth/login" ? "nav-link-active" : ""
-            }`}
-          >
-            Login
-          </Link>
+          {loginOrOutButton}
           {!user && !accessToken && (
             <Link
               href="/auth/register"

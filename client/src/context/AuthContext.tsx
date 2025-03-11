@@ -12,6 +12,7 @@ import { loginRequest, registerRequest } from "@/api/authAPI";
 
 interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
   register: (email: string, password: string) => Promise<void>;
   user: User | null;
   accessToken: string | null;
@@ -50,6 +51,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setUser, setAccessToken]
   );
 
+  const logout = useCallback(() => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    setUser(null);
+    setAccessToken(null);
+    alert("Logged out successfully");
+  }, [setUser, setAccessToken]);
+
   const register = useCallback(
     async (email: string, password: string) => {
       try {
@@ -68,7 +77,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   return (
-    <AuthContext.Provider value={{ login, register, user, accessToken }}>
+    <AuthContext.Provider
+      value={{ login, logout, register, user, accessToken }}
+    >
       {children}
     </AuthContext.Provider>
   );
