@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function Registration() {
-  const { register, user, accessToken } = useAuth();
+  const { register, user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -18,10 +18,10 @@ export default function Registration() {
   };
 
   useEffect(() => {
-    if (user && accessToken) {
+    if (user) {
       router.push(`/home/${user.id}`);
     }
-  }, [user, accessToken, router]);
+  }, [user, router]);
 
   return (
     <div className="auth-container">

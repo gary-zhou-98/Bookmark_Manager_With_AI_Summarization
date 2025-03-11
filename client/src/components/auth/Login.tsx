@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const { login, user, accessToken } = useAuth();
+  const { login, user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -18,10 +18,10 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user && accessToken) {
+    if (user) {
       router.push(`/home/${user.id}`);
     }
-  }, [user, accessToken, router]);
+  }, [user, router]);
 
   return (
     <div className="auth-container">
