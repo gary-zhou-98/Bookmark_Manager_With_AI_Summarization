@@ -40,8 +40,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await loginRequest(email, password).then((response) => {
           setUser(response.user);
           setAccessToken(response.access_token);
-          localStorage.setItem("user", JSON.stringify(response.user));
-          localStorage.setItem("accessToken", response.access_token);
         });
       } catch (error) {
         console.error("Login failed:", error);
@@ -52,8 +50,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const logout = useCallback(() => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
     setUser(null);
     setAccessToken(null);
     alert("Logged out successfully");
@@ -65,8 +61,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await registerRequest(email, password).then((response) => {
           setUser(response.user);
           setAccessToken(response.access_token);
-          localStorage.setItem("user", JSON.stringify(response.user));
-          localStorage.setItem("accessToken", response.access_token);
         });
       } catch (error) {
         console.error("Register failed:", error);
