@@ -2,10 +2,11 @@
 
 import { User } from "@/models/User";
 import { createContext, useState, useContext, useCallback } from "react";
-import { loginRequest } from "@/api/authAPI";
+import { loginRequest, registerRequest } from "@/api/authAPI";
 
 interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
   user: User | null;
   accessToken: string | null;
 }
@@ -16,20 +17,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const login = useCallback(async (email: string, password: string) => {
-    try {
-      await loginRequest(email, password).then((response) => {
-        setUser(response.user);
-        setAccessToken(response.access_token);
-      });
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed: " + error);
-    }
-  }, []);
+  const login = useCallback(
+    async (email: string, password: string) => {
+      try {
+        await loginRequest(email, password).then((response) => {
+          setUser(response.user);
+          setAccessToken(response.access_token);
+        });
+      } catch (error) {
+        console.error("Login failed:", error);
+        alert("Login failed: " + error);
+      }
+    },
+    [setUser, setAccessToken]
+  );
+
+  const register = useCallback(
+    async (email: string, password: string) => {
+      try {
+        await registerRequest(email, password).then((response) => {
+          setUser(response.user);
+          setAccessToken(response.access_token);
+        });
+      } catch (error) {
+        console.error("Register failed:", error);
+        alert("Register failed: " + error);
+      }
+    },
+    [setUser, setAccessToken]
+  );
 
   return (
-    <AuthContext.Provider value={{ login, user, accessToken }}>
+    <AuthContext.Provider value={{ login, register, user, accessToken }}>
       {children}
     </AuthContext.Provider>
   );
