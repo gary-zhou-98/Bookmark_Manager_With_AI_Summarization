@@ -32,7 +32,7 @@ def create_app():
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_SECURE"] = False  # True in production if using HTTPS
     app.config["JWT_COOKIE_SAMESITE"] = "None"  # or "None" if cross-site
-    app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # or True if you want CSRF protection
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = False  # SHOULD BE TRUE IN PRODUCTION
 
     # Initialize extensions with app
     db.init_app(app)

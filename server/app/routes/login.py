@@ -1,8 +1,9 @@
 from app.models import User
 from app.service.authService import check_password
 from flask import request, jsonify, Blueprint
-from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies
 from flask_cors import CORS
+from datetime import timedelta
 
 login_bp = Blueprint("login", __name__)
 CORS(login_bp, 
@@ -10,7 +11,6 @@ CORS(login_bp,
      supports_credentials=True,
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 )
-
 
 @login_bp.post("/auth/login")
 def login():
@@ -31,13 +31,10 @@ def login():
     return jsonify({"error": "Invalid password"}), 401
 
   # Create access token
-  access_token = create_access_token(identity=user.id)
-  refresh_token = create_refresh_token(identity=user.id)
-
+  access_token = create_access_token(identity=user.id, 
+                                     expires_delta=timedelta(minutes=15))
   response = jsonify({
-    "access_token": access_token, 
-    "refresh_token": refresh_token,
-    "user_id": user.id
+    "user": user.to_dict()
   })
 
   set_access_cookies(response, access_token)
