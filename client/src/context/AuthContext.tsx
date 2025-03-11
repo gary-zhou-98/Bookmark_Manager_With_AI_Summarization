@@ -1,7 +1,13 @@
 "use client";
 
 import { User } from "@/models/User";
-import { createContext, useState, useContext, useCallback } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useCallback,
+  useEffect,
+} from "react";
 import { loginRequest, registerRequest } from "@/api/authAPI";
 
 interface AuthContextType {
@@ -17,12 +23,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const accessToken = localStorage.getItem("accessToken");
+    if (user && accessToken) {
+      setUser(JSON.parse(user));
+      setAccessToken(accessToken);
+    }
+    console.log(user, accessToken);
+  }, []);
+
   const login = useCallback(
     async (email: string, password: string) => {
       try {
         await loginRequest(email, password).then((response) => {
           setUser(response.user);
           setAccessToken(response.access_token);
+          localStorage.setItem("user", JSON.stringify(response.user));
+          localStorage.setItem("accessToken", response.access_token);
         });
       } catch (error) {
         console.error("Login failed:", error);
@@ -38,6 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await registerRequest(email, password).then((response) => {
           setUser(response.user);
           setAccessToken(response.access_token);
+          localStorage.setItem("user", JSON.stringify(response.user));
+          localStorage.setItem("accessToken", response.access_token);
         });
       } catch (error) {
         console.error("Register failed:", error);
