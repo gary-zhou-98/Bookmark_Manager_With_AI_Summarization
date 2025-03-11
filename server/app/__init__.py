@@ -29,6 +29,10 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
+    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_COOKIE_SECURE"] = False  # True in production if using HTTPS
+    app.config["JWT_COOKIE_SAMESITE"] = "None"  # or "None" if cross-site
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # or True if you want CSRF protection
 
     # Initialize extensions with app
     db.init_app(app)
