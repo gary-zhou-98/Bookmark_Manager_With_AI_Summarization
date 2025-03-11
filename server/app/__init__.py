@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import URL
 import os
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt
 from flask_bcrypt import Bcrypt
 
 # Initialize extensions
@@ -47,7 +47,9 @@ def create_app():
     app.register_blueprint(login_bp)
 
     @app.route('/health')
+    @jwt_required()
     def health():
-        return {"message": "Hello from Flask!"}, 200
+        current_user = get_jwt()
+        return {"message": "Hello from Flask!", "user_id": current_user["sub"]}, 200
 
     return app
