@@ -33,11 +33,8 @@ def register():
     db.session.commit()
     # Create access token
     access_token = create_access_token(identity=new_user.id)
-    refresh_token = create_refresh_token(identity=new_user.id)
     response = jsonify({
-        "access_token": access_token, 
-        "refresh_token": refresh_token,
-        "user_id": new_user.id
+        "user": new_user.to_dict()
       })
 
     set_access_cookies(response, access_token)
