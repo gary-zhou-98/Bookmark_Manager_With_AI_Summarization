@@ -3,6 +3,7 @@ from app.models import User
 from app.service.authService import hash_password
 from flask import request, jsonify, Blueprint
 from flask_cors import CORS
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 register_bp = Blueprint("register", __name__)
 CORS(register_bp, 
@@ -30,9 +31,15 @@ def register():
   try:
     db.session.add(new_user)
     db.session.commit()
+    # Create access token
+    access_token = create_access_token(identity=new_user.id)
+    refresh_token = create_refresh_token(identity=new_user.id)
+    return jsonify({
+      "access_token": access_token, 
+      "refresh_token": refresh_token,
+      "user": new_user.to_dict()
+    }), 201
   except Exception as e:
     print(f"Error registering user: {e}")
     db.session.rollback()
     return jsonify({"error": "Failed to register user"}), 500
-
-  return jsonify({"message": "User registered successfully"}), 201
