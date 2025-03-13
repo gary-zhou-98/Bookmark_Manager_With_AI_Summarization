@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import URL
 import os
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt
 from flask_bcrypt import Bcrypt
-
+from flask_cors import CORS
 # Initialize extensions
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -28,12 +28,55 @@ def create_app():
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    
+    # JWT Configuration
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
+    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_COOKIE_SECURE"] = False  # True in production if using HTTPS
+    app.config["JWT_COOKIE_SAMESITE"] = "Lax"  # or "None" if cross-site
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = False
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600  # 1 hour
 
     # Initialize extensions with app
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+
+    # JWT error handlers
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        print(f"Invalid token error: {error}")  # Debug log
+        return jsonify({
+            'status': 422,
+            'sub_status': 42,
+            'message': 'Invalid token',
+            'error': str(error)
+        }), 422
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_data):
+        print(f"Expired token: {jwt_data}")  # Debug log
+        return jsonify({
+            'status': 401,
+            'sub_status': 42,
+            'message': 'Token has expired'
+        }), 401
+
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        print(f"Missing token: {error}")  # Debug log
+        return jsonify({
+            'status': 401,
+            'sub_status': 42,
+            'message': 'Missing token',
+            'error': str(error)
+        }), 401
+
+    CORS(app,
+         resources={r"/health": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}},
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         expose_headers=["Content-Type", "Authorization"])
 
     # Import and register blueprints
     from app.routes.register import register_bp
@@ -43,7 +86,21 @@ def create_app():
     app.register_blueprint(login_bp)
 
     @app.route('/health')
+    @jwt_required()
     def health():
-        return {"message": "Hello from Flask!"}, 200
+        try:
+            current_user = get_jwt()
+            print(f"JWT payload: {current_user}")  # Debug log
+            user_id = current_user["sub"]  # This will now be a string
+            return {
+                "message": "Hello from Flask!", 
+                "user_id": user_id,
+            }, 200
+        except Exception as e:
+            print(f"Error in health route: {str(e)}")  # Debug log
+            return jsonify({
+                'message': 'Internal server error',
+                'error': str(e)
+            }), 500
 
     return app
