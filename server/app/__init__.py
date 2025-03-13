@@ -85,6 +85,9 @@ def create_app():
     from app.routes.auth.login import login_bp
     app.register_blueprint(login_bp)
 
+    from app.routes.bookmark.bookmark import bookmark_bp
+    app.register_blueprint(bookmark_bp)
+
     @app.route('/health')
     @jwt_required()
     def health():
