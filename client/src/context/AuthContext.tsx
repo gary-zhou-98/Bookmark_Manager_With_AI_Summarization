@@ -2,7 +2,7 @@
 
 import { User } from "@/models/User";
 import { createContext, useState, useContext, useCallback } from "react";
-import { loginRequest, registerRequest } from "@/api/authAPI";
+import { loginRequest, registerRequest, logoutRequest } from "@/api/authAPI";
 
 interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
@@ -30,10 +30,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [setUser]
   );
 
-  const logout = useCallback(() => {
-    setUser(null);
-    alert("Logged out successfully");
-  }, [setUser]);
+  const logout = useCallback(async () => {
+    if (!user) {
+      alert("No user to logout");
+      return;
+    }
+    try {
+      await logoutRequest().then(() => {
+        setUser(null);
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("Logout failed: " + error);
+    }
+  }, [user]);
 
   const register = useCallback(
     async (email: string, password: string) => {

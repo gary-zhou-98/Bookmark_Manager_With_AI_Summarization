@@ -55,3 +55,15 @@ export async function registerRequest(email: string, password: string) {
     throw error;
   }
 }
+export async function logoutRequest() {
+  try {
+    const response = await axios.post(`${config.apiUrl}/auth/logout`, {});
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || "Logout failed");
+    }
+    throw error;
+  }
+}

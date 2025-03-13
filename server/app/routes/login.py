@@ -48,3 +48,15 @@ def login():
   # Set cookies and debug
   set_access_cookies(response, access_token)
   return response, 200
+
+@login_bp.post("/auth/logout")
+@jwt_required()
+def logout():
+  user = get_jwt_identity()
+  if not user:
+    return jsonify({"error": "User not found"}), 401
+  
+  response = jsonify({"message": "Logged out successfully"})
+  unset_jwt_cookies(response)
+  return response, 200
+

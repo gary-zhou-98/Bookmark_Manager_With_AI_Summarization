@@ -3,6 +3,9 @@
 import Link from "next/link";
 import "@/styles/homePage.css";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // Temporary mock data
 const mockBookmarks = [
@@ -25,6 +28,15 @@ const mockBookmarks = [
 ];
 
 export default function HomePage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+    }
+  }, [user, router]);
+
   return (
     <div className="home-container">
       <div className="home-header">
