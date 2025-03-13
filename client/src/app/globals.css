@@ -30,5 +30,5 @@ body {
 }
 
 .main-container {
-  @apply flex flex-col items-center justify-start min-h-[100%] w-full h-full mt-12;
+  @apply flex flex-col items-center justify-start min-h-[100%] w-full h-full mt-16;
 }

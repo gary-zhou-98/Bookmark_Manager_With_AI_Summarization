@@ -2,6 +2,8 @@ import axios from "axios";
 
 import { config } from "@/config/env";
 
+axios.defaults.withCredentials = true;
+
 export async function loginRequest(email: string, password: string) {
   const requestBody = {
     email,
