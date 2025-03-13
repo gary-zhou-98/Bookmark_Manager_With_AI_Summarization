@@ -1,5 +1,5 @@
 from app import db
-from app.models import Bookmark
+from app.models import Bookmark, User
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import ( jwt_required, 
                                 get_jwt_identity)
@@ -43,3 +43,19 @@ def create_bookmark():
     except Exception as e:
       db.session.rollback()
     return jsonify({"error": "Failed to create bookmark"}), 500
+
+@bookmark_bp.get("/bookmarks")
+@jwt_required()
+def get_bookmarks():
+    user_id = get_jwt_identity()
+    if not user_id:
+       return jsonify({"error": "Missing user authentication"}), 401
+    
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+       return jsonify({"error": "User not found"}), 404
+    
+    bookmarks = user.bookmarks
+    return jsonify({"bookmarks": [bookmark.to_dict() for bookmark in bookmarks]}), 200
+
+
