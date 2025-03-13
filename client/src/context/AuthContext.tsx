@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         await loginRequest(email, password).then((response) => {
           setUser(response.user);
+          localStorage.setItem("user", JSON.stringify(response.user));
         });
       } catch (error) {
         console.error("Login failed:", error);
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await logoutRequest().then(() => {
         setUser(null);
+        localStorage.removeItem("user");
       });
     } catch (error) {
       console.error("Logout failed:", error);
