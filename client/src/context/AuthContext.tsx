@@ -1,7 +1,14 @@
 "use client";
 
 import { User } from "@/models/User";
-import { createContext, useState, useContext, useCallback } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
+import { useRouter } from "next/navigation";
 import { loginRequest, registerRequest, logoutRequest } from "@/api/authAPI";
 
 interface AuthContextType {
@@ -15,6 +22,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && !user) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [user]);
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -40,12 +55,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await logoutRequest().then(() => {
         setUser(null);
         localStorage.removeItem("user");
+        router.push("/auth/login");
       });
     } catch (error) {
       console.error("Logout failed:", error);
       alert("Logout failed: " + error);
     }
-  }, [user]);
+  }, [user, router]);
 
   const register = useCallback(
     async (email: string, password: string) => {

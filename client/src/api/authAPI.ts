@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { config } from "@/config/env";
+import { envConfig } from "@/config/env";
 
 axios.defaults.withCredentials = true;
 
@@ -12,7 +12,7 @@ export async function loginRequest(email: string, password: string) {
 
   try {
     const response = await axios.post(
-      `${config.apiUrl}/auth/login`,
+      `${envConfig.apiUrl}/auth/login`,
       requestBody,
       {
         headers: {
@@ -38,7 +38,7 @@ export async function registerRequest(email: string, password: string) {
 
   try {
     const response = await axios.post(
-      `${config.apiUrl}/auth/register`,
+      `${envConfig.apiUrl}/auth/register`,
       requestBody,
       {
         headers: {
@@ -57,7 +57,7 @@ export async function registerRequest(email: string, password: string) {
 }
 export async function logoutRequest() {
   try {
-    const response = await axios.post(`${config.apiUrl}/auth/logout`, {});
+    const response = await axios.post(`${envConfig.apiUrl}/auth/logout`, {});
 
     return response.data;
   } catch (error) {
