@@ -4,7 +4,11 @@ import { envConfig } from "@/config/env";
 
 axios.defaults.withCredentials = true;
 
-export async function fetchAllBookmarks() {
+export async function fetchAllBookmarks(userId: string | null) {
+  if (!userId) {
+    return [];
+  }
+
   try {
     const response = await axios.get(`${envConfig.apiUrl}/bookmarks`);
     console.log(response.data);

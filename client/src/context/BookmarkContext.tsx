@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import useSWR from "swr";
 import { Bookmark } from "@/models/Bookmark";
 import { fetchAllBookmarks } from "@/api/bookmarkAPI";
+import { useAuth } from "@/context/AuthContext";
 
 interface BookmarkContextType {
-  bookmarks: Bookmark[];
-  fetchBookmarks: () => void;
+  data: Bookmark[];
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(
@@ -18,19 +19,29 @@ export const BookmarkProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const { user } = useAuth();
+  // const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const { data } = useSWR(["/bookmarks", user?.id], fetchAllBookmarks);
 
-  const fetchBookmarks = useCallback(async () => {
-    try {
-      const bookmarks = await fetchAllBookmarks();
-      setBookmarks(bookmarks);
-    } catch (error) {
-      console.error("Error fetching bookmarks:", error);
-    }
-  }, [setBookmarks]);
+  // useEffect(() => {
+  //   if (!data) {
+  //     return;
+  //   }
+
+  //   if (data.length != bookmarks.length) {
+  //     setBookmarks(data);
+  //   }
+
+  //   for (let i = 0; i < data.length; i++) {
+  //     if (!bookmarks[i].equals(data[i])) {
+  //       setBookmarks(data);
+  //       break;
+  //     }
+  //   }
+  // }, [data, bookmarks, setBookmarks]);
 
   return (
-    <BookmarkContext.Provider value={{ bookmarks, fetchBookmarks }}>
+    <BookmarkContext.Provider value={{ data }}>
       {children}
     </BookmarkContext.Provider>
   );
