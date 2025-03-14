@@ -3,24 +3,18 @@
 import Link from "next/link";
 import "@/styles/homePage.css";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { Bookmark } from "@/models/Bookmark";
 
 // Temporary mock data
 const mockBookmarks = [
-  {
-    id: 1,
-    title: "Understanding React Server Components",
-    url: "https://nextjs.org/docs/getting-started/react-essentials#server-components",
-  },
-  {
-    id: 2,
-    title: "Next.js App Router",
-    url: "https://nextjs.org/docs/app",
-  },
-  {
-    id: 3,
-    title: "Tailwind CSS Dark Mode Guide",
-    url: "https://tailwindcss.com/docs/dark-mode",
-  },
+  new Bookmark(
+    "1",
+    "Understanding React Server Components",
+    "https://nextjs.org/docs/getting-started/react-essentials#server-components",
+    new Date(),
+    null,
+    null
+  ),
   // Add more mock items as needed
 ];
 
