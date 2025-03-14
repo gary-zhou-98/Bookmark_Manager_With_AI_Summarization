@@ -79,11 +79,14 @@ def create_app():
          expose_headers=["Content-Type", "Authorization"])
 
     # Import and register blueprints
-    from app.routes.register import register_bp
+    from app.routes.auth.register import register_bp
     app.register_blueprint(register_bp)
     
-    from app.routes.login import login_bp
+    from app.routes.auth.login import login_bp
     app.register_blueprint(login_bp)
+
+    from app.routes.bookmark.bookmark import bookmark_bp
+    app.register_blueprint(bookmark_bp)
 
     @app.route('/health')
     @jwt_required()

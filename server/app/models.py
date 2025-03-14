@@ -31,3 +31,13 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("User", back_populates="bookmarks")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'url': self.url,
+            'title': self.title,
+            'favicon_url': self.favicon_url,
+            'summary': self.summary,
+            'created_at': self.created_at.isoformat()
+        }
+
