@@ -35,7 +35,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     async (email: string, password: string) => {
       try {
         await loginRequest(email, password).then((response) => {
-          setUser(response.user);
+          setUser(
+            new User(
+              response.user.id,
+              response.user.email,
+              response.user.createdAt,
+              response.user.bookmarks
+            )
+          );
           localStorage.setItem("user", JSON.stringify(response.user));
         });
       } catch (error) {
@@ -67,7 +74,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     async (email: string, password: string) => {
       try {
         await registerRequest(email, password).then((response) => {
-          setUser(response.user);
+          setUser(
+            new User(
+              response.user.id,
+              response.user.email,
+              response.user.createdAt,
+              response.user.bookmarks
+            )
+          );
         });
       } catch (error) {
         console.error("Register failed:", error);
