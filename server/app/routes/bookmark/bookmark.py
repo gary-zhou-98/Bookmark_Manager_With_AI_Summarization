@@ -58,4 +58,23 @@ def get_bookmarks():
     bookmarks = user.bookmarks
     return jsonify({"bookmarks": [bookmark.to_dict() for bookmark in bookmarks]}), 200
 
+@bookmark_bp.delete("/bookmark/<int:bookmark_id>")
+@jwt_required()
+def delete_bookmark(bookmark_id):
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify({"error": "Missing user authentication"}), 401
+    
+    bookmark = Bookmark.query.filter_by(id=bookmark_id, user_id=user_id).first()
+    
+    if not bookmark:
+        return jsonify({"error": "Bookmark not found"}), 404
+    
+    try:
+      db.session.delete(bookmark)
+      db.session.commit()
+      return jsonify({"message": "Bookmark deleted successfully"}), 200
+    except Exception as e:
+      db.session.rollback()
+      return jsonify({"error": "Failed to delete bookmark"}), 500
 
