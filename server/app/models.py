@@ -36,8 +36,8 @@ class Bookmark(db.Model):
             'id': self.id,
             'url': self.url,
             'title': self.title,
-            'favicon_url': self.favicon_url,
+            'faviconUrl': self.favicon_url,
             'summary': self.summary,
-            'created_at': self.created_at.isoformat()
+            'createdAt': self.created_at.isoformat()
         }
 

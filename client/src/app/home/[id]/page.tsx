@@ -4,25 +4,28 @@ import Link from "next/link";
 import "@/styles/homePage.css";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Bookmark } from "@/models/Bookmark";
+import { fetchAllBookmarks } from "@/api/bookmarkAPI";
+import useSWR from "swr";
 import { useBookmark } from "@/context/BookmarkContext";
-
-// Temporary mock data
-const mockBookmarks = [
-  new Bookmark(
-    "1",
-    "Understanding React Server Components",
-    "https://nextjs.org/docs/getting-started/react-essentials#server-components",
-    new Date(),
-    null,
-    null
-  ),
-  // Add more mock items as needed
-];
+import { useEffect } from "react";
 
 export default function HomePage() {
-  const { data } = useBookmark();
+  const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
+  const { bookmarks, updateBookmarks } = useBookmark();
 
-  const bookmarks = data ? mockBookmarks.concat(data) : mockBookmarks;
+  useEffect(() => {
+    if (data) {
+      updateBookmarks(data.bookmarks);
+    }
+  }, [data, updateBookmarks]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="home-container">
@@ -34,26 +37,21 @@ export default function HomePage() {
       </div>
 
       <div className="bookmarks-grid">
-        {bookmarks.map(
-          (bookmark) => (
-            console.log(bookmark),
-            (
-              <Link
-                key={bookmark.id}
-                href={bookmark.url}
-                target="_blank"
-                className="bookmark-card group"
-              >
-                <h2 className="bookmark-title group-hover:text-indigo-400">
-                  {bookmark.title}
-                </h2>
-                <p className="bookmark-url group-hover:text-indigo-400/70">
-                  {bookmark.url}
-                </p>
-              </Link>
-            )
-          )
-        )}
+        {bookmarks.map((bookmark: Bookmark) => (
+          <Link
+            key={bookmark.id}
+            href={bookmark.url}
+            target="_blank"
+            className="bookmark-card group"
+          >
+            <h2 className="bookmark-title group-hover:text-indigo-400">
+              {bookmark.title}
+            </h2>
+            <p className="bookmark-url group-hover:text-indigo-400/70">
+              {bookmark.url}
+            </p>
+          </Link>
+        ))}
       </div>
 
       <button className="add-bookmark-button" aria-label="Add new bookmark">
