@@ -2,12 +2,13 @@
 
 import { createContext, useContext, useState, useCallback } from "react";
 import { Bookmark } from "@/models/Bookmark";
-import { addBookmark } from "@/api/bookmarkAPI";
+import { addBookmarkRequest, deleteBookmarkRequest } from "@/api/bookmarkAPI";
 
 interface BookmarkContextType {
   bookmarks: Bookmark[];
   updateBookmarks: (bookmarks: Bookmark[]) => void;
   addNewBookmark: (title: string, url: string) => Promise<void>;
+  deleteBookmark: (id: string) => Promise<void>;
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(
@@ -30,7 +31,7 @@ export const BookmarkProvider = ({
 
   const addNewBookmark = useCallback(async (title: string, url: string) => {
     try {
-      const data = await addBookmark(title, url);
+      const data = await addBookmarkRequest(title, url);
       if (data) {
         const newBookmark = new Bookmark(
           data.bookmark.id,
@@ -47,9 +48,21 @@ export const BookmarkProvider = ({
     }
   }, []);
 
+  const deleteBookmark = useCallback(async (id: string) => {
+    try {
+      await deleteBookmarkRequest(id).then(() => {
+        setBookmarks((prevBookmarks) =>
+          prevBookmarks.filter((bookmark) => bookmark.id !== id)
+        );
+      });
+    } catch (error) {
+      console.error("Error deleting bookmark:", error);
+    }
+  }, []);
+
   return (
     <BookmarkContext.Provider
-      value={{ bookmarks, updateBookmarks, addNewBookmark }}
+      value={{ bookmarks, updateBookmarks, addNewBookmark, deleteBookmark }}
     >
       {children}
     </BookmarkContext.Provider>

@@ -18,7 +18,7 @@ export async function fetchAllBookmarks() {
   }
 }
 
-export async function addBookmark(title: string, url: string) {
+export async function addBookmarkRequest(title: string, url: string) {
   try {
     const requestBody = {
       title,
@@ -33,6 +33,25 @@ export async function addBookmark(title: string, url: string) {
         },
       }
     );
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw (
+        error.response?.data || "An error occurred while creating new bookmark"
+      );
+    }
+    throw error;
+  }
+}
+
+export async function deleteBookmarkRequest(id: string) {
+  try {
+    const response = await axios.delete(`${envConfig.apiUrl}/bookmark/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     return response.data;
   } catch (error) {

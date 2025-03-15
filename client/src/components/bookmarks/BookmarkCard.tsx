@@ -7,7 +7,7 @@ import "@/styles/bookmarkCard.css";
 
 export interface BookmarkCardProps {
   bookmark: Bookmark;
-  onDelete?: (bookmarkId: string | number) => void; // Handle both string and number IDs
+  onDelete?: (bookmarkId: string) => Promise<void>;
 }
 
 export const BookmarkCard: React.FC<BookmarkCardProps> = ({
@@ -15,7 +15,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   onDelete,
 }: BookmarkCardProps) => {
   const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent the link navigation
+    e.preventDefault();
     if (onDelete) {
       onDelete(bookmark.id);
     }

@@ -1,18 +1,19 @@
 "use client";
 
 import "@/styles/homePage.css";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Bookmark } from "@/models/Bookmark";
 import { fetchAllBookmarks } from "@/api/bookmarkAPI";
-import useSWR from "swr";
 import { useBookmark } from "@/context/BookmarkContext";
-import { useEffect, useState } from "react";
 import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
 import { BookmarkCard } from "@/components/bookmarks/BookmarkCard";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
-  const { bookmarks, updateBookmarks, addNewBookmark } = useBookmark();
+  const { bookmarks, updateBookmarks, addNewBookmark, deleteBookmark } =
+    useBookmark();
   const [showAddBookmarkModal, setShowAddBookmarkModal] = useState(false);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function HomePage() {
           <BookmarkCard
             key={bookmark.id}
             bookmark={bookmark}
-            onDelete={() => {}}
+            onDelete={deleteBookmark}
           />
         ))}
       </div>
