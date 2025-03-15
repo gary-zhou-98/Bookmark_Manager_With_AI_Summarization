@@ -32,7 +32,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     # Create access token
-    access_token = create_access_token(identity=new_user.id)
+    access_token = create_access_token(identity=str(new_user.id))
     response = jsonify({
         "user": new_user.to_dict()
       })
