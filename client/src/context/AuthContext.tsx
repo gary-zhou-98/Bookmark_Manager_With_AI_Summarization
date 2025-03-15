@@ -82,6 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               response.user.bookmarks
             )
           );
+          localStorage.setItem("user", JSON.stringify(response.user));
         });
       } catch (error) {
         console.error("Register failed:", error);

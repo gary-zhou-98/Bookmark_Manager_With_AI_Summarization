@@ -7,7 +7,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, set_ac
 
 register_bp = Blueprint("register", __name__)
 CORS(register_bp, 
-     resources={r"/auth/register": {"origins": "http://localhost:3000"}},
+     resources={r"/auth/register": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}},
      supports_credentials=True,
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 )

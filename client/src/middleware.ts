@@ -32,7 +32,8 @@ async function authMiddleware(request: NextRequest) {
     }
 
     const pathUserId = request.nextUrl.pathname.split("/")[2];
-    if (userId !== pathUserId) {
+    if (String(userId) !== String(pathUserId)) {
+      console.log("Redirecting to:", `/home/${userId}`);
       return NextResponse.redirect(new URL(`/home/${userId}`, request.url));
     }
 
