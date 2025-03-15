@@ -45,6 +45,7 @@ export const BookmarkProvider = ({
       }
     } catch (error) {
       console.error("Error adding bookmark:", error);
+      alert("Error adding bookmark: " + error);
     }
   }, []);
 
@@ -57,6 +58,7 @@ export const BookmarkProvider = ({
       });
     } catch (error) {
       console.error("Error deleting bookmark:", error);
+      alert("Error deleting bookmark: " + error);
     }
   }, []);
 

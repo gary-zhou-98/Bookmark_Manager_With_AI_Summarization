@@ -24,6 +24,7 @@ export default function HomePage() {
   }, [data, updateBookmarks]);
 
   if (error) {
+    alert("Error fetching bookmarks: " + error);
     return <div>Error: {error}</div>;
   }
 
