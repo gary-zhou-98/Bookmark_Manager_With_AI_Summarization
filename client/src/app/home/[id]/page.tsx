@@ -9,6 +9,7 @@ import { fetchAllBookmarks } from "@/api/bookmarkAPI";
 import { useBookmark } from "@/context/BookmarkContext";
 import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
 import { BookmarkCard } from "@/components/bookmarks/BookmarkCard";
+import { LoadingState } from "@/components/common/LoadingState";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
@@ -27,7 +28,7 @@ export default function HomePage() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingState text="Loading bookmarks..." />;
   }
 
   return (
