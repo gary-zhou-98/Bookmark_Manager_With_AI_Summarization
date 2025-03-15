@@ -7,11 +7,13 @@ import { Bookmark } from "@/models/Bookmark";
 import { fetchAllBookmarks } from "@/api/bookmarkAPI";
 import useSWR from "swr";
 import { useBookmark } from "@/context/BookmarkContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
   const { bookmarks, updateBookmarks } = useBookmark();
+  const [showAddBookmarkModal, setShowAddBookmarkModal] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -54,9 +56,22 @@ export default function HomePage() {
         ))}
       </div>
 
-      <button className="add-bookmark-button" aria-label="Add new bookmark">
+      <button
+        className="add-bookmark-button"
+        aria-label="Add new bookmark"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowAddBookmarkModal(true);
+        }}
+      >
         <PlusIcon className="h-6 w-6" />
       </button>
+
+      <AddBookmarkModal
+        isOpen={showAddBookmarkModal}
+        onClose={() => setShowAddBookmarkModal(false)}
+        onSubmitForm={() => {}}
+      />
     </div>
   );
 }
