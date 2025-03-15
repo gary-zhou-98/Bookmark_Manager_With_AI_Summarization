@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import "@/styles/homePage.css";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Bookmark } from "@/models/Bookmark";
@@ -9,6 +8,7 @@ import useSWR from "swr";
 import { useBookmark } from "@/context/BookmarkContext";
 import { useEffect, useState } from "react";
 import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
+import { BookmarkCard } from "@/components/bookmarks/BookmarkCard";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
@@ -40,19 +40,11 @@ export default function HomePage() {
 
       <div className="bookmarks-grid">
         {bookmarks.map((bookmark: Bookmark) => (
-          <Link
+          <BookmarkCard
             key={bookmark.id}
-            href={bookmark.url}
-            target="_blank"
-            className="bookmark-card group"
-          >
-            <h2 className="bookmark-title group-hover:text-indigo-400">
-              {bookmark.title}
-            </h2>
-            <p className="bookmark-url group-hover:text-indigo-400/70">
-              {bookmark.url}
-            </p>
-          </Link>
+            bookmark={bookmark}
+            onDelete={() => {}}
+          />
         ))}
       </div>
 
