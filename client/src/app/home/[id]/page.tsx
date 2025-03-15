@@ -12,7 +12,7 @@ import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
-  const { bookmarks, updateBookmarks } = useBookmark();
+  const { bookmarks, updateBookmarks, addNewBookmark } = useBookmark();
   const [showAddBookmarkModal, setShowAddBookmarkModal] = useState(false);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function HomePage() {
       <AddBookmarkModal
         isOpen={showAddBookmarkModal}
         onClose={() => setShowAddBookmarkModal(false)}
-        onSubmitForm={() => {}}
+        onSubmitForm={addNewBookmark}
       />
     </div>
   );

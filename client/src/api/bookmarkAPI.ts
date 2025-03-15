@@ -17,3 +17,30 @@ export async function fetchAllBookmarks() {
     throw error;
   }
 }
+
+export async function addBookmark(title: string, url: string) {
+  try {
+    const requestBody = {
+      title,
+      url,
+    };
+    const response = await axios.post(
+      `${envConfig.apiUrl}/bookmark`,
+      requestBody,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw (
+        error.response?.data || "An error occurred while creating new bookmark"
+      );
+    }
+    throw error;
+  }
+}

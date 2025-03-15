@@ -2,10 +2,12 @@
 
 import { createContext, useContext, useState, useCallback } from "react";
 import { Bookmark } from "@/models/Bookmark";
+import { addBookmark } from "@/api/bookmarkAPI";
 
 interface BookmarkContextType {
   bookmarks: Bookmark[];
   updateBookmarks: (bookmarks: Bookmark[]) => void;
+  addNewBookmark: (title: string, url: string) => Promise<void>;
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(
@@ -26,8 +28,29 @@ export const BookmarkProvider = ({
     [setBookmarks]
   );
 
+  const addNewBookmark = useCallback(async (title: string, url: string) => {
+    try {
+      const data = await addBookmark(title, url);
+      if (data) {
+        const newBookmark = new Bookmark(
+          data.bookmark.id,
+          data.bookmark.title,
+          data.bookmark.url,
+          data.bookmark.createdAt,
+          data.bookmark.faviconUrl,
+          data.bookmark.summary
+        );
+        setBookmarks((prevBookmarks) => [...prevBookmarks, newBookmark]);
+      }
+    } catch (error) {
+      console.error("Error adding bookmark:", error);
+    }
+  }, []);
+
   return (
-    <BookmarkContext.Provider value={{ bookmarks, updateBookmarks }}>
+    <BookmarkContext.Provider
+      value={{ bookmarks, updateBookmarks, addNewBookmark }}
+    >
       {children}
     </BookmarkContext.Provider>
   );
