@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@layer components {
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+
+  .modal-content {
+    @apply bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 mx-4;
+    @apply transform transition-all duration-300 ease-in-out;
+    @apply border border-indigo-500/20;
+  }
+
+  .modal-header {
+    @apply flex justify-between items-center mb-6;
+  }
+
+  .modal-title {
+    @apply text-2xl font-semibold text-gray-100;
+  }
+
+  .modal-close {
+    @apply text-gray-400 hover:text-indigo-300 transition-colors duration-200;
+    @apply p-2 rounded-full hover:bg-indigo-500/10;
+  }
+
+  .modal-form {
+    @apply space-y-4;
+  }
+
+  .form-group {
+    @apply flex flex-col space-y-2;
+  }
+
+  .form-label {
+    @apply text-sm font-medium text-gray-300;
+  }
+
+  .form-input {
+    @apply bg-gray-700 border border-gray-600 text-gray-100 rounded-lg;
+    @apply p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+    @apply placeholder-gray-400 transition-all duration-200;
+    @apply hover:border-indigo-500/50;
+  }
+
+  .form-actions {
+    @apply flex space-x-3 mt-6;
+  }
+
+  .submit-button {
+    @apply bg-indigo-500/90 text-white px-6 py-2.5 rounded-lg font-medium;
+    @apply hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800;
+    @apply transition-all duration-200 flex-1;
+  }
+
+  .cancel-button {
+    @apply bg-gray-700 text-gray-300 px-6 py-2.5 rounded-lg font-medium;
+    @apply hover:bg-gray-600/80 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800;
+    @apply transition-all duration-200 flex-1;
+    @apply hover:text-indigo-200;
+  }
+}

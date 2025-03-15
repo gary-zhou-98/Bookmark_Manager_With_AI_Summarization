@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@layer components {
+  .loading-container {
+    @apply min-h-screen flex flex-col items-center justify-center;
+    @apply bg-gray-900;
+  }
+
+  .loading-spinner {
+    @apply w-12 h-12 border-4 border-indigo-500/30 rounded-full;
+    @apply border-t-indigo-500;
+    @apply animate-spin mb-4;
+  }
+
+  .loading-text {
+    @apply text-gray-300 text-lg font-medium;
+    @apply animate-pulse;
+  }
+}

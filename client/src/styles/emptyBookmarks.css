@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@layer components {
+  .empty-state-container {
+    @apply flex flex-col items-center justify-center;
+    @apply p-12 rounded-lg;
+    @apply bg-gray-800/50;
+    @apply border border-gray-700/50;
+  }
+
+  .empty-state-icon {
+    @apply w-16 h-16 mb-4;
+    @apply text-indigo-500/70;
+  }
+
+  .empty-state-title {
+    @apply text-xl font-semibold mb-2;
+    @apply text-gray-200;
+  }
+
+  .empty-state-description {
+    @apply text-gray-400 text-center;
+    @apply max-w-md;
+  }
+}
