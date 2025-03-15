@@ -10,6 +10,7 @@ import { useBookmark } from "@/context/BookmarkContext";
 import { AddBookmarkModal } from "@/components/bookmarks/AddBookmarkModal";
 import { BookmarkCard } from "@/components/bookmarks/BookmarkCard";
 import { LoadingState } from "@/components/common/LoadingState";
+import { EmptyBookmarks } from "@/components/bookmarks/EmptyBookmarks";
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR("/bookmarks", fetchAllBookmarks);
@@ -30,6 +31,10 @@ export default function HomePage() {
 
   if (isLoading) {
     return <LoadingState text="Loading bookmarks..." />;
+  }
+
+  if (bookmarks.length === 0) {
+    return <EmptyBookmarks />;
   }
 
   return (
