@@ -33,10 +33,6 @@ export default function HomePage() {
     return <LoadingState text="Loading bookmarks..." />;
   }
 
-  if (bookmarks.length === 0) {
-    return <EmptyBookmarks />;
-  }
-
   return (
     <div className="home-container">
       <div className="home-header">
@@ -46,15 +42,19 @@ export default function HomePage() {
         </p>
       </div>
 
-      <div className="bookmarks-grid">
-        {bookmarks.map((bookmark: Bookmark) => (
-          <BookmarkCard
-            key={bookmark.id}
-            bookmark={bookmark}
-            onDelete={deleteBookmark}
-          />
-        ))}
-      </div>
+      {bookmarks.length > 0 ? (
+        <div className="bookmarks-grid">
+          {bookmarks.map((bookmark: Bookmark) => (
+            <BookmarkCard
+              key={bookmark.id}
+              bookmark={bookmark}
+              onDelete={deleteBookmark}
+            />
+          ))}
+        </div>
+      ) : (
+        <EmptyBookmarks />
+      )}
 
       <button
         className="add-bookmark-button"
