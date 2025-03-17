@@ -9,4 +9,4 @@ def extract_url_content(url: str) -> str:
     return text
   except Exception as e:
     print(f"Error extracting URL content: {e}")
-    return None
+    raise e

@@ -1,6 +1,7 @@
 from app import db
 from app.models import Bookmark, User
 from app.service.urlExtractionService import extract_url_content
+from app.service.opeanAIService import summarize_text
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import ( jwt_required, 
                                 get_jwt_identity)
@@ -92,8 +93,11 @@ def get_bookmark_content(bookmark_id):
     
     try:
       content = extract_url_content(bookmark.url)
-      return jsonify({"content": content}), 200
+      summary = summarize_text(content)
+      bookmark.summary = summary
+      db.session.commit()
+      return jsonify({"summary": summary}), 200
     except Exception as e:
-      return jsonify({"error": "Failed to extract content"}), 500
+      return jsonify({"error": str(e)}), 500
 
 
