@@ -1,5 +1,6 @@
 from app import db
 from app.models import Bookmark, User
+from app.service.urlExtractionService import extract_url_content
 from flask import request, jsonify, Blueprint
 from flask_jwt_extended import ( jwt_required, 
                                 get_jwt_identity)
@@ -77,4 +78,22 @@ def delete_bookmark(bookmark_id):
     except Exception as e:
       db.session.rollback()
       return jsonify({"error": "Failed to delete bookmark"}), 500
+    
+@bookmark_bp.get("/bookmark/<int:bookmark_id>")
+@jwt_required()
+def get_bookmark_content(bookmark_id):
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify({"error": "Missing user authentication"}), 401
+    
+    bookmark = Bookmark.query.filter_by(id=bookmark_id, user_id=user_id).first()
+    if not bookmark:
+        return jsonify({"error": "Bookmark not found"}), 404
+    
+    try:
+      content = extract_url_content(bookmark.url)
+      return jsonify({"content": content}), 200
+    except Exception as e:
+      return jsonify({"error": "Failed to extract content"}), 500
+
 
