@@ -23,7 +23,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
 
   return (
     <div className="bookmark-card group">
-      <Link href={`/bookmark/${bookmark.id}`} target="_blank" className="block">
+      <Link href={`/bookmark/${bookmark.id}`} className="block">
         <h2 className="bookmark-title group-hover:text-indigo-400">
           {bookmark.title}
         </h2>

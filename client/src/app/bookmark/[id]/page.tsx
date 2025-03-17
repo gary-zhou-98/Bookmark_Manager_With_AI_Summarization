@@ -41,27 +41,27 @@ export default function BookmarkPage() {
   return (
     <div className="bookmark-details-container">
       <div className="bookmark-details-card">
-        <h1 className="bookmark-title">{bookmark.title}</h1>
+        <h1 className="bookmark-details-title">{bookmark.title}</h1>
         <a
           href={bookmark.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="bookmark-url"
+          className="bookmark-details-url"
         >
           {bookmark.url}
         </a>
 
-        <div className="bookmark-metadata">
+        <div className="bookmark-details-metadata">
           <CalendarIcon className="w-5 h-5" />
           <span>Saved on {formatDate(bookmark.createdAt)}</span>
         </div>
 
-        <div className="bookmark-summary">
-          <div className="summary-title">
+        <div className="bookmark-details-summary">
+          <div className="bookmark-details-summary-title">
             <SparklesIcon className="w-5 h-5" />
             <span>AI Summary</span>
           </div>
-          <p className="summary-content">
+          <p className="bookmark-details-summary-content">
             {bookmark.summary || "No summary available."}
           </p>
         </div>
