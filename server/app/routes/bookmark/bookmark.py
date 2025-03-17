@@ -91,12 +91,15 @@ def get_bookmark_content(bookmark_id):
     if not bookmark:
         return jsonify({"error": "Bookmark not found"}), 404
     
+    if bookmark.summary:
+       return jsonify({"bookmark": bookmark.to_dict()}), 200
+       
     try:
       content = extract_url_content(bookmark.url)
       summary = summarize_text(content)
       bookmark.summary = summary
       db.session.commit()
-      return jsonify({"summary": summary}), 200
+      return jsonify({"bookmark": bookmark.to_dict()}), 200
     except Exception as e:
       return jsonify({"error": str(e)}), 500
 
