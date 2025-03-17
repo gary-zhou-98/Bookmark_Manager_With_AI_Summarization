@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@layer components {
+  .bookmark-details-container {
+    @apply max-w-6xl mx-auto px-4 py-8;
+  }
+
+  .bookmark-details-card {
+    @apply bg-gray-800/50 rounded-lg p-8;
+    @apply border border-gray-700/50;
+  }
+
+  .bookmark-details-title {
+    @apply text-3xl font-semibold text-gray-200 mb-3;
+  }
+
+  .bookmark-details-url {
+    @apply text-lg text-indigo-400 hover:text-indigo-300 transition-colors;
+    @apply mb-8 break-all;
+  }
+
+  .bookmark-details-metadata {
+    @apply flex items-center gap-2 text-base text-gray-400 mb-8;
+    @apply border-b border-gray-700/50 pb-6;
+  }
+
+  .bookmark-details-summary {
+    @apply bg-gray-900/50 rounded-lg p-6;
+    @apply text-gray-300 leading-relaxed;
+  }
+
+  .bookmark-details-summary-title {
+    @apply text-base font-medium text-gray-400 mb-3;
+    @apply flex items-center gap-2;
+  }
+
+  .bookmark-details-summary-content {
+    @apply text-lg leading-relaxed;
+  }
+}

@@ -63,3 +63,16 @@ export async function deleteBookmarkRequest(id: string) {
     throw error;
   }
 }
+
+export async function getBookmarkRequest(parms: [string, string]) {
+  try {
+    const [, id] = parms;
+    const response = await axios.get(`${envConfig.apiUrl}/bookmark/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data || "An error occurred while fetching bookmark";
+    }
+    throw error;
+  }
+}
