@@ -22,22 +22,27 @@ export default function Header() {
       Login
     </Link>
   );
+
+  const titlePath = user ? `/home/${user.id}` : "/";
+
   return (
     <header className="header-container">
       <div className="header-content">
-        <Link href="/" className="header-logo">
+        <Link href={titlePath} className="header-logo">
           Bookmark Manager
         </Link>
 
         <nav className="header-nav">
-          <Link
-            href="/bookmarks"
-            className={`nav-link ${
-              pathname === "/bookmarks" ? "nav-link-active" : ""
-            }`}
-          >
-            My Bookmarks
-          </Link>
+          {user && (
+            <Link
+              href={`/home/${user.id}`}
+              className={`nav-link ${
+                pathname === "/bookmarks" ? "nav-link-active" : ""
+              }`}
+            >
+              My Bookmarks
+            </Link>
+          )}
           {loginOrOutButton}
           {!user && (
             <Link
