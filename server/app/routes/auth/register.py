@@ -4,6 +4,7 @@ from app.service.authService import hash_password
 from flask import request, jsonify, Blueprint
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies
+from datetime import timedelta
 
 register_bp = Blueprint("register", __name__)
 CORS(register_bp, 
@@ -32,7 +33,8 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     # Create access token
-    access_token = create_access_token(identity=str(new_user.id))
+    access_token = create_access_token(identity=str(new_user.id), 
+                                       expires_delta=timedelta(minutes=30))
     response = jsonify({
         "user": new_user.to_dict()
       })

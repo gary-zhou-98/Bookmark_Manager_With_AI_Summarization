@@ -38,7 +38,7 @@ def login():
   access_token = create_access_token(
     identity=str(user.id),  # Convert ID to string
     additional_claims={"email": user.email},
-    expires_delta=timedelta(minutes=15)
+    expires_delta=timedelta(minutes=30)
   )
   
   response = jsonify({

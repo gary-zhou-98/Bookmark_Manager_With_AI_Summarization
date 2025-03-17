@@ -3,9 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import URL
 import os
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt, create_access_token, set_access_cookies, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from datetime import datetime, timedelta, timezone
 # Initialize extensions
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -88,6 +89,22 @@ def create_app():
     from app.routes.bookmark.bookmark import bookmark_bp
     app.register_blueprint(bookmark_bp)
 
+    @app.after_request
+    def refresh_expiring_jwts(response):
+        try:
+            exp_timestamp = get_jwt()["exp"]
+            now = datetime.now(timezone.utc)
+            target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+            if target_timestamp > exp_timestamp:
+                access_token = create_access_token(identity=get_jwt_identity(),
+                                                   expires_delta=timedelta(minutes=30))
+                set_access_cookies(response, access_token)
+                return response
+        except (RuntimeError, KeyError):
+            # Case where there is not a valid JWT. Just return the original response
+            return response
+
+
     @app.route('/health')
     @jwt_required()
     def health():
@@ -107,3 +124,4 @@ def create_app():
             }), 500
 
     return app
+
