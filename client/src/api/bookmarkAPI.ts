@@ -64,8 +64,9 @@ export async function deleteBookmarkRequest(id: string) {
   }
 }
 
-export async function getBookmarkRequest(id: string) {
+export async function getBookmarkRequest(parms: [string, string]) {
   try {
+    const [, id] = parms;
     const response = await axios.get(`${envConfig.apiUrl}/bookmark/${id}`);
     return response.data;
   } catch (error) {
