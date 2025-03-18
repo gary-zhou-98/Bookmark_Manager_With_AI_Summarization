@@ -47,6 +47,7 @@ A modern web application that helps users manage their bookmarks with AI-powered
    ```sql
    CREATE DATABASE bookmark_manager_dev;
    ```
+3. (Optional) Download and install pgadmin4 and Postman to test and view database data.
 
 ### Backend Setup
 
@@ -119,7 +120,119 @@ A modern web application that helps users manage their bookmarks with AI-powered
    npm run dev
    ```
 
-## Important Implementation Details
+## AI Summarization Process
+
+The application uses a three-step process to generate AI summaries for bookmarked URLs:
+
+### 1. Content Extraction
+
+The URL content is extracted using `requests` and `BeautifulSoup4`:
+
+```python
+from bs4 import BeautifulSoup
+import requests
+
+def extract_url_content(url: str) -> str:
+  try:
+    source = requests.get(url).text
+    soup = BeautifulSoup(source, "html.parser")
+    # Extract clean text content, removing scripts and styles
+    text = soup.get_text("\n", strip=True)
+    return text
+  except Exception as e:
+    print(f"Error extracting URL content: {e}")
+    raise e
+```
+
+### 2. Text Processing
+
+The extracted content is processed and chunked to handle OpenAI's token limits:
+
+```python
+def summarize_text(text: str) -> str:
+  if text is None or text.strip() == "":
+    return ""
+
+  # Split text into manageable chunks
+  text_chunks = text.split("\n")
+  text_batch = []
+  for i in range(0, len(text_chunks), 10000):
+    text_batch.append("".join(text_chunks[i:i+10000]))
+```
+
+### 3. AI Summarization
+
+The processed text is sent to OpenAI's API for summarization:
+
+```python
+  messages = []
+  # System message to guide the AI's summarization
+  messages.append({
+    "role": "system",
+    "content": "You are a helpful assistant that summarizes text scraped from a website. "
+               "Please take each chunk into consideration for full context and summarize "
+               "the entire text. The summarization should be precise and concise. "
+               "Try to keep it at maximum 5 sentences if possible."
+  })
+
+  # Add text chunks as user messages
+  for text in text_batch:
+    messages.append({
+      "role": "user",
+      "content": text
+    })
+
+  # Signal end of chunks
+  messages.append({
+    "role": "user",
+    "content": "[END_OF_CHUNK]"
+  })
+
+  try:
+    response = client.chat.completions.create(
+      model="gpt-4o-mini",
+      messages=messages,
+      temperature=0.3  # Lower temperature for more focused summaries
+    )
+    return response.choices[0].message.content.strip()
+  except Exception as e:
+    print(f"Error summarizing text: {e}")
+    raise e
+```
+
+### Implementation Notes
+
+1. Content Extraction:
+
+   - Uses `requests` to fetch the webpage content
+   - `BeautifulSoup4` parses HTML and extracts clean text
+   - Handles various HTML structures and encodings
+   - Removes scripts, styles, and other non-content elements
+
+2. Text Processing:
+
+   - Preserves context across chunks
+   - Handles empty or invalid content gracefully
+
+3. OpenAI Integration:
+
+   - Uses GPT-4o-mini for high-quality summaries
+   - Low temperature (0.3) for consistent, focused output
+   - System prompt ensures concise, relevant summaries
+   - Handles API errors and rate limits
+
+4. Error Handling:
+
+   - Graceful handling of network errors
+   - Proper error propagation for debugging
+   - Fallback behavior for failed summarizations
+
+5. Potential Performance Improvements:
+   - Asynchronous processing of summarie in background threads to avoid blocking
+   - Redis to cache popular bookmarks
+   - Efficient text chunking across multiple connections and summarize summaries from each chunk to avoid token limitations
+
+## Authentication Implementation Details
 
 ### CORS Configuration
 
